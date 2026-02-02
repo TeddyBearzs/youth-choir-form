@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>National Youth Choir Registration & Update Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base target="_top">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; padding: 20px 0; }
+    .container { max-width: 700px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .header-logo { text-align: center; margin-bottom: 25px; }
+    .form-label { font-weight: 600; color: #495057; }
+    #messageBox { display: none; margin-bottom: 20px; }
+    .btn-submit { background-color: #004a99; border: none; }
+    .search-results { max-height: 200px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 5px; margin-bottom: 20px; display: none; }
+    .search-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+    .search-item:hover { background-color: #f0f7ff; }
+    .mode-indicator { font-size: 0.9rem; font-weight: bold; padding: 5px 10px; border-radius: 5px; margin-bottom: 15px; display: inline-block; }
+    .mode-new { background-color: #e7f3ff; color: #007bff; }
+    .mode-update { background-color: #fff3cd; color: #856404; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header-logo">
+    <h2 class="text-primary">National Youth Choir Registration & Update Form</h2>
+    <p class="text-muted">Registration & Update Portal</p>
+  </div>
+
+  <!-- Search Section -->
+  <div class="card mb-4 border-primary">
+    <div class="card-body">
+      <label class="form-label">Search to Update Existing Entry</label>
+      <div class="input-group">
+        <input type="text" id="searchInput" class="form-control" placeholder="Enter First or Last Name...">
+        <button class="btn btn-outline-primary" type="button" onclick="handleSearch()">Search</button>
+      </div>
+      <div id="searchResults" class="search-results"></div>
+    </div>
+  </div>
+
+  <div id="messageBox" class="alert" role="alert"></div>
+
+  <div id="modeDisplay" class="mode-indicator mode-new">Mode: New Registration</div>
+
+  <form id="regForm">
+    <input type="hidden" name="id" id="entryId">
+    
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">First Name</label>
+        <input type="text" name="firstName" id="firstName" class="form-control" placeholder="Enter first name" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Last Name</label>
+        <input type="text" name="lastName" id="lastName" class="form-control" placeholder="Enter last name" required>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Gender</label>
+      <select name="gender" id="gender" class="form-select" required aria-label="Gender">
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Female">Female</option>
+        <option value="Male">Male</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Church (NTCOG Churches)</label>
+      <select name="church" class="form-select" required aria-label="Church (NTCOG Churches)">
+        <option value="" disabled selected>Select Local Church</option>
+        <optgroup label="St. Lucy"> 
+          <option value="Alexandria">Alexandria</option>
+          <option value="Checker Hall">Checker Hall</option>
+          <option value="Crab Hill">Crab Hill</option>  
+          <option value="Durhams">Durhams</option>
+          <option value="Mount Summit">Mount Summit</option>
+        </optgroup>
+        <optgroup label="St. Peter">
+          <option value="Black Bess">Black Bess</option>
+          <option value="Diamond Corner">Diamond Corner</option>
+          <option value="Roebuck">Roebuck</option>
+        </optgroup>
+       <optgroup label="St. Andrew">
+          <option value="Gods Favour">Gods Favour</option>
+          <option value="Rock Hall">Rock Hall</option>
+          <option value="Shorey Village">Shorey Village</option>
+        </optgroup>
+          <optgroup label="St. James">
+          <option value="Fitts Village">Fitts Village</option>
+          <option value="Holders Hill">Holders Hill</option>
+          <option value="The Garden">The Garden</option>
+          <option value="Sion Hill">Sion Hill</option>
+          <option value="Weston">Weston</option>
+        </optgroup>
+        <optgroup label="St. Thomas">
+          <option value="Bridgefield">Bridgefield</option>
+          <option value="Redman Village">Redman Village</option>
+           <option value="Welchman Hall">Welchman Hall</option>
+        </optgroup>
+        <optgroup label="St. Joseph">
+          <option value="Braggs Hill">Braggs Hill</option>
+          <option value="Parris Hall">Parris Hall</option>
+          <option value="Spa Hill">Spa Hill</option>
+        </optgroup>
+        <optgroup label="St. Micheal (North)">
+          <option value="Bank Hall">Bank Hall</option>
+          <option value="Eckstein">Eckstein</option>
+          <option value="Parris Gap">Parris Hall</option>
+          <option value="Wavell Avenue">Wavell Avenue</option>
+        </optgroup>
+        <optgroup label="St. Micheal (South)">
+          <option value="Bibby's Lane">Bibby Lane</option>
+          <option value="Goodland">Goodland</option>
+          <option value="Jackmans">Jackmans</option>
+          <option value="River Road">River Road</option>
+        </optgroup>
+        <optgroup label="St. George">
+          <option value="Charles Rowe Bridge">Charles Rowe Bridge</option>
+          <option value="Greens">Greens</option>
+          <option value="Kingdom Empowerment">Kingdom Empowerment</option>
+          <option value="Sweet Vale">Sweet Vale</option>
+          <option value="Taitts Hill">Taitts Hill</option>
+          <option value="Waverley Cot">Waverly Cot</option>
+        </optgroup>
+        <optgroup label="St. John">
+          <option value="Carter's Pentacostal">Carter Pentacostal</option>
+          <option value="Sherbourne">Sherbourne</option>
+        </optgroup>
+        <optgroup label="Christ Church"> 
+          <option value="Boarded Hall">Boarded Hall</option>
+          <option value="Cox Road">Cox Road</option>
+          <option value="Lead Vale">Lead Vale</option>
+        </optgroup>
+        <optgroup label="St. Phillip">
+          <option value="Brereton">Brereton</option>
+          <option value="Church Village">Church Village</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Phone Number</label>
+      <input type="tel" name="phone" id="phone" class="form-control" placeholder="246-000-0000" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Ailments (Optional)</label>
+      <textarea name="ailments" id="ailments" class="form-control" rows="2" placeholder="Enter any medical conditions or allergies"></textarea>
+    </div>
+
+    <hr>
+    <h5 class="mb-3 text-secondary">Emergency Contact</h5>
+
+    <div class="row">
+      <div class="col-md-5 mb-3">
+        <label class="form-label">Relationship</label>
+        <select name="contactType" id="contactType" class="form-select" required aria-label="Relationship">
+          <option value="Father">Father</option>
+          <option value="Mother">Mother</option>
+          <option value="Guardian">Guardian</option>
+          <option value="Spouse">Spouse</option>
+        </select>
+      </div>
+      <div class="col-md-7 mb-3">
+        <label class="form-label">Contact Name</label>
+        <input type="text" name="contactName" id="contactName" class="form-control" placeholder="Enter contact name" required>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label for="contactPhone" class="form-label">Contact Phone</label>
+      <input type="tel" name="contactPhone" id="contactPhone" class="form-control" placeholder="1246-000-0000" required>
+    </div>
+
+    <div class="d-grid gap-2">
+      <button type="submit" class="btn btn-primary btn-submit p-2" id="submitBtn">Save Registration</button>
+      <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">Clear / New Form</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const form = document.getElementById('regForm');
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('messageBox');
+  const resultsDiv = document.getElementById('searchResults');
+  const modeDisplay = document.getElementById('modeDisplay');
+
+  function handleSearch() {
+    const query = document.getElementById('searchInput').value;
+    if (query.length < 2) return;
+    
+    resultsDiv.innerHTML = '<div class="p-2 text-muted">Searching...</div>';
+    resultsDiv.style.display = 'block';
+
+    google.script.run
+      .withSuccessHandler(displayResults)
+      .searchRecords(query);
+  }
+
+  function displayResults(results) {
+    if (results.length === 0) {
+      resultsDiv.innerHTML = '<div class="p-2 text-danger">No records found.</div>';
+      return;
+    }
+
+    resultsDiv.innerHTML = results.map(item => `
+      <div class="search-item" onclick='loadRecord(${JSON.stringify(item).replace(/'/g, "&apos;")})'>
+        <strong>${item.firstname} ${item.lastname}</strong><br>
+        <small class="text-muted">${item.church} | ${item.phonenumber}</small>
+      </div>
+    `).join('');
+  }
+
+  function loadRecord(item) {
+    resetForm();
+    document.getElementById('entryId').value = item.id;
+    document.getElementById('firstName').value = item.firstname;
+    document.getElementById('lastName').value = item.lastname;
+    document.getElementById('gender').value = item.gender;
+    document.getElementById('church').value = item.church;
+    document.getElementById('phone').value = item.phonenumber;
+    document.getElementById('ailments').value = item.ailments || "";
+    
+    // Parse Contact Person (Format was "Type: Name")
+    const contactParts = item.contactperson.split(': ');
+    if (contactParts.length > 1) {
+      document.getElementById('contactType').value = contactParts[0];
+      document.getElementById('contactName').value = contactParts[1];
+    } else {
+      document.getElementById('contactName').value = item.contactperson;
+    }
+    
+    document.getElementById('contactPhone').value = item.contactnumber;
+    
+    modeDisplay.innerText = "Mode: Updating Existing Entry";
+    modeDisplay.className = "mode-indicator mode-update";
+    resultsDiv.style.display = 'none';
+    document.getElementById('searchInput').value = "";
+    window.scrollTo(0, form.offsetTop - 100);
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.innerText = "Processing...";
+
+    google.script.run
+      .withSuccessHandler(function(response) {
+        msg.className = "alert alert-success";
+        msg.innerText = response;
+        msg.style.display = "block";
+        resetForm();
+        btn.disabled = false;
+        btn.innerText = "Save Registration";
+        window.scrollTo(0,0);
+        setTimeout(() => { msg.style.display = 'none'; }, 5000);
+      })
+      .withFailureHandler(function(err) {
+        msg.className = "alert alert-danger";
+        msg.innerText = "Error: " + err;
+        msg.style.display = "block";
+        btn.disabled = false;
+        btn.innerText = "Save Registration";
+      })
+      .processForm(this);
+  });
+
+  function resetForm() {
+    form.reset();
+    document.getElementById('entryId').value = "";
+    modeDisplay.innerText = "Mode: New Registration";
+    modeDisplay.className = "mode-indicator mode-new";
+    resultsDiv.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
