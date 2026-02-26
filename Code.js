@@ -18,14 +18,6 @@ function doPost(e) {
   }
 }
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * Handles GET requests to the API
- * @param {Object} e - event object with parameter property
- * @param {string} e.parameter.search - search query for records
- * @returns {ContentService.TextOutput} - JSON response with search results
- */
-/*******  2e8e9671-4ae9-4095-8183-0071e75362a7  *******/
 function doGet(e) {
   if (e.parameter.search) {
     const results = searchRecords(e.parameter.search);
