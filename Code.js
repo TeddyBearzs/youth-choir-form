@@ -1,16 +1,21 @@
 /**
- * Apps Script Backend for GitHub Pages
- * Handles POST requests for saving/updating and GET for searching
+ * Updated Apps Script Backend for External Requests (GitHub/HTML)
+ * Updated with spiritual background and ministry fields
  */
 
-// Allow the script to be called from a different domain (GitHub Pages)
 function doPost(e) {
-  const result = processForm(JSON.parse(e.postData.contents));
-  return ContentService.createTextOutput(JSON.stringify({ "result": result }))
-    .setMimeType(ContentService.MimeType.JSON);
+  try {
+    const formData = JSON.parse(e.postData.contents);
+    const result = processForm(formData);
+    
+    return ContentService.createTextOutput(JSON.stringify({ "result": result }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ "result": "Error: " + err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
-// Separate function for searching via GET
 function doGet(e) {
   if (e.parameter.search) {
     const results = searchRecords(e.parameter.search);
@@ -26,16 +31,24 @@ function processForm(formData) {
   if (!sheet) return "Error: Sheet 'Registrations' not found";
   
   const data = sheet.getDataRange().getValues();
+  
+  // Prepare the record based on form fields
   const record = [
     formData.id || Utilities.getUuid(),
     formData.firstName,
     formData.lastName,
     formData.gender,
     formData.church,
+    formData.pastorName,
+    formData.youthLeader,
     formData.phone,
     formData.ailments,
     formData.contactType + ": " + formData.contactName,
-    formData.contactPhone
+    formData.contactPhone,
+    formData.salvationDate,
+    formData.baptismStatus === "Baptized" ? formData.baptismDate : "Not baptized as yet",
+    formData.holyGhostBaptism,
+    formData.ministryAreas // This will be a comma-separated string from the JS
   ];
 
   if (formData.id) {
@@ -64,7 +77,9 @@ function searchRecords(query) {
     if (firstName.includes(searchTerm) || lastName.includes(searchTerm)) {
       let obj = {};
       headers.forEach((header, index) => {
-        obj[header.replace(/\s+/g, '').toLowerCase()] = data[i][index];
+        // Create clean keys for the JSON response
+        const key = header.toString().replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        obj[key] = data[i][index];
       });
       results.push(obj);
     }
