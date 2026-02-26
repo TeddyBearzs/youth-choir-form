@@ -7,31 +7,42 @@ function doPost(e) {
   try {
     const formData = JSON.parse(e.postData.contents);
     const result = processForm(formData);
-    
-    return ContentService.createTextOutput(JSON.stringify({ "result": result }))
-      .setMimeType(ContentService.MimeType.JSON);
+
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: result }),
+    ).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ "result": "Error: " + err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: "Error: " + err.toString() }),
+    ).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Handles GET requests to the API
+ * @param {Object} e - event object with parameter property
+ * @param {string} e.parameter.search - search query for records
+ * @returns {ContentService.TextOutput} - JSON response with search results
+ */
+/*******  2e8e9671-4ae9-4095-8183-0071e75362a7  *******/
 function doGet(e) {
   if (e.parameter.search) {
     const results = searchRecords(e.parameter.search);
-    return ContentService.createTextOutput(JSON.stringify(results))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify(results)).setMimeType(
+      ContentService.MimeType.JSON,
+    );
   }
   return ContentService.createTextOutput("Service Running");
 }
 
 function processForm(formData) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = ss.getSheetByName('Registrations');
+  const sheet = ss.getSheetByName("Registrations");
   if (!sheet) return "Error: Sheet 'Registrations' not found";
-  
+
   const data = sheet.getDataRange().getValues();
-  
+
   // Prepare the record based on form fields
   const record = [
     formData.id || Utilities.getUuid(),
@@ -46,9 +57,11 @@ function processForm(formData) {
     formData.contactType + ": " + formData.contactName,
     formData.contactPhone,
     formData.salvationDate,
-    formData.baptismStatus === "Baptized" ? formData.baptismDate : "Not baptized as yet",
+    formData.baptismStatus === "Baptized"
+      ? formData.baptismDate
+      : "Not baptized as yet",
     formData.holyGhostBaptism,
-    formData.ministryAreas // This will be a comma-separated string from the JS
+    formData.ministryAreas, // This will be a comma-separated string from the JS
   ];
 
   if (formData.id) {
@@ -58,14 +71,14 @@ function processForm(formData) {
         return "Entry updated successfully!";
       }
     }
-  } 
+  }
   sheet.appendRow(record);
   return "Registration saved successfully!";
 }
 
 function searchRecords(query) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = ss.getSheetByName('Registrations');
+  const sheet = ss.getSheetByName("Registrations");
   const data = sheet.getDataRange().getValues();
   const headers = data[0];
   const results = [];
@@ -78,7 +91,10 @@ function searchRecords(query) {
       let obj = {};
       headers.forEach((header, index) => {
         // Create clean keys for the JSON response
-        const key = header.toString().replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        const key = header
+          .toString()
+          .replace(/[^a-zA-Z0-9]/g, "")
+          .toLowerCase();
         obj[key] = data[i][index];
       });
       results.push(obj);
