@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fire Surge National Youth Choir Registration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; padding: 20px 0; }
+    .container { max-width: 800px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .header-logo { text-align: center; margin-bottom: 25px; }
+    .form-label { font-weight: 600; color: #495057; }
+    .section-title { background: #fff5f5; padding: 10px; border-radius: 5px; margin: 25px 0 15px 0; font-size: 1.1rem; color: #dc3545; font-weight: bold; border-left: 5px solid #dc3545; }
+    #messageBox { display: none; margin-bottom: 20px; }
+    .btn-submit { background-color: #dc3545; border: none; color: white; }
+    .btn-submit:hover { background-color: #a71d2a; }
+    .search-results { max-height: 200px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 5px; margin-bottom: 20px; display: none; }
+    .search-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; }
+    .search-item:hover { background-color: #fff5f5; }
+    .mode-indicator { font-size: 0.9rem; font-weight: bold; padding: 5px 10px; border-radius: 5px; margin-bottom: 15px; display: inline-block; }
+    .mode-new { background-color: #fff5f5; color: #dc3545; }
+    .mode-update { background-color: #fff3cd; color: #856404; }
+    optgroup { font-weight: bold; color: #dc3545; }
+    .ministry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .text-primary { color: #dc3545 !important; }
+    .border-primary { border-color: #dc3545 !important; }
+    .btn-outline-primary { color: #dc3545; border-color: #dc3545; }
+    .btn-outline-primary:hover { background-color: #dc3545; border-color: #dc3545; color: white; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header-logo">
+    <h2 class="text-primary">Fire Surge National Youth Choir</h2>
+    <p class="text-muted">Member Registration & Update Portal</p>
+  </div>
+
+  <!-- Search Section -->
+  <div class="card mb-4 border-primary shadow-sm">
+    <div class="card-body">
+      <label class="form-label">Search to Update Member Entry</label>
+      <div class="input-group">
+        <input type="text" id="searchInput" class="form-control" placeholder="Enter Member Name...">
+        <button class="btn btn-outline-primary" type="button" onclick="handleSearch()">Search</button>
+      </div>
+      <div id="searchResults" class="search-results shadow-sm"></div>
+    </div>
+  </div>
+
+  <div id="messageBox" class="alert" role="alert"></div>
+  <div id="modeDisplay" class="mode-indicator mode-new">Mode: New Member Registration</div>
+
+  <form id="regForm">
+    <input type="hidden" name="id" id="entryId">
+    
+    <div class="section-title">Personal Information</div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">First Name</label>
+        <input type="text" name="firstName" id="firstName" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Last Name</label>
+        <input type="text" name="lastName" id="lastName" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Gender</label>
+        <select name="gender" id="gender" class="form-select" required>
+          <option value="" disabled selected>Select Gender</option>
+          <option value="Female">Female</option>
+          <option value="Male">Male</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Phone Number</label>
+        <input type="tel" name="phone" id="phone" class="form-control" placeholder="246-000-0000" required>
+      </div>
+    </div>
+
+        <div class="mb-3">
+          <label class="form-label">Church (NTCOG Churches)</label>
+          <select
+            name="church"
+            id="church"
+            class="form-select"
+            title="Select Local Church"
+            required
+          >
+            <optgroup label="St. Lucy">
+              <option value="Alexandria">Alexandria</option>
+              <option value="Checker Hall">Checker Hall</option>
+              <option value="Crab Hill">Crab Hill</option>
+              <option value="Durhams">Durhams</option>
+              <option value="Mount Summit">Mount Summit</option>
+            </optgroup>
+            <optgroup label="St. Peter">
+              <option value="Black Bess">Black Bess</option>
+              <option value="Diamond Corner">Diamond Corner</option>
+              <option value="Roebuck">Roebuck</option>
+            </optgroup>
+            <optgroup label="St. Andrew">
+              <option value="Gods Favour">Gods Favour</option>
+              <option value="Rock Hall">Rock Hall</option>
+              <option value="Shorey Village">Shorey Village</option>
+            </optgroup>
+            <optgroup label="St. James">
+              <option value="Fitts Village">Fitts Village</option>
+              <option value="Holders Hill">Holders Hill</option>
+              <option value="The Garden">The Garden</option>
+              <option value="Sion Hill">Sion Hill</option>
+              <option value="Weston">Weston</option>
+            </optgroup>
+            <optgroup label="St. Thomas">
+              <option value="Bridgefield">Bridgefield</option>
+              <option value="Redman Village">Redman Village</option>
+              <option value="Welchman Hall">Welchman Hall</option>
+            </optgroup>
+            <optgroup label="St. Joseph">
+              <option value="Braggs Hill">Braggs Hill</option>
+              <option value="Parris Hall">Parris Hall</option>
+              <option value="Spa Hill">Spa Hill</option>
+            </optgroup>
+            <optgroup label="St. Micheal (North)">
+              <option value="Bank Hall">Bank Hall</option>
+              <option value="Eckstein">Eckstein</option>
+              <option value="Parris Gap">Parris Hall</option>
+              <option value="Wavell Avenue">Wavell Avenue</option>
+            </optgroup>
+            <optgroup label="St. Micheal (South)">
+              <option value="Bibby's Lane">Bibby Lane</option>
+              <option value="Goodland">Goodland</option>
+              <option value="Jackmans">Jackmans</option>
+              <option value="River Road">River Road</option>
+            </optgroup>
+            <optgroup label="St. George">
+              <option value="Charles Rowe Bridge">Charles Rowe Bridge</option>
+              <option value="Greens">Greens</option>
+              <option value="Kingdom Empowerment">Kingdom Empowerment</option>
+              <option value="Sweet Vale">Sweet Vale</option>
+              <option value="Taitts Hill">Taitts Hill</option>
+              <option value="Waverley Cot">Waverly Cot</option>
+            </optgroup>
+            <optgroup label="St. John">
+              <option value="Carter's Pentacostal">Carter Pentacostal</option>
+              <option value="Sherbourne">Sherbourne</option>
+            </optgroup>
+            <optgroup label="Christ Church">
+              <option value="Boarded Hall">Boarded Hall</option>
+              <option value="Cox Road">Cox Road</option>
+              <option value="Lead Vale">Lead Vale</option>
+            </optgroup>
+            <optgroup label="St. Phillip">
+              <option value="Brereton">Brereton</option>
+              <option value="Church Village">Church Village</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="mb-3">
+      <label class="form-label">Name of Pastor</label>
+      <input type="text" name="pastorName" id="pastorName" class="form-control" placeholder="Rev. ..." required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Local Youth Ministry Leader</label>
+      <input type="text" name="youthLeader" id="youthLeader" class="form-control" required>
+    </div>
+
+    <div class="section-title">Spiritual Background</div>
+    <div class="mb-3">
+      <label class="form-label">When did you accept Jesus Christ as your personal Lord and Saviour?</label>
+      <input type="date" name="salvationDate" id="salvationDate" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label d-block">Water Baptism Status</label>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="baptismStatus" id="baptizedYes" value="Baptized" onchange="toggleBaptismDate(true)">
+        <label class="form-check-label" for="baptizedYes">Water Baptized</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="baptismStatus" id="baptizedNo" value="In Process" onchange="toggleBaptismDate(false)" checked>
+        <label class="form-check-label" for="baptizedNo">Not baptized as yet / In process ✅</label>
+      </div>
+    </div>
+
+    <div id="baptismDateDiv" class="mb-3" style="display:none;">
+      <label class="form-label">Baptism Date</label>
+      <input type="date" name="baptismDate" id="baptismDate" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label d-block">Have you ever experienced the Baptism of the Holy Ghost and fire?</label>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="holyGhostBaptism" id="hgYes" value="Yes">
+        <label class="form-check-label" for="hgYes">Yes</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="holyGhostBaptism" id="hgNo" value="No" checked>
+        <label class="form-check-label" for="hgNo">No</label>
+      </div>
+    </div>
+
+    <div class="section-title">Ministry Involvement</div>
+    <p class="text-muted small">Select the area(s) of ministry you are currently active in at your local assembly:</p>
+    <div class="ministry-grid mb-3">
+      <div class="form-check"><input class="form-check-input ministry-check" type="checkbox" value="Youth"> <label class="form-check-label">Youth</label></div>
+      <div class="form-check"><input class="form-check-input ministry-check" type="checkbox" value="Praise & Worship"> <label class="form-check-label">Praise & Worship</label></div>
+      <div class="form-check"><input class="form-check-input ministry-check" type="checkbox" value="Sunday School"> <label class="form-check-label">Sunday School</label></div>
+      <div class="form-check"><input class="form-check-input ministry-check" type="checkbox" value="Men's Ministry"> <label class="form-check-label">Men's Ministry</label></div>
+      <div class="form-check"><input class="form-check-input ministry-check" type="checkbox" value="Ladies' Ministry"> <label class="form-check-label">Ladies' Ministry</label></div>
+      <div class="form-check"><input class="form-check-input ministry-check" type="checkbox" value="Ushering"> <label class="form-check-label">Ushering</label></div>
+      <div class="form-check"><input class="form-check-input ministry-check" type="checkbox" value="Media/Tech"> <label class="form-check-label">Media/Tech</label></div>
+      <div class="form-check"><input class="form-check-input ministry-check" type="checkbox" value="Outreach/Evangelism"> <label class="form-check-label">Outreach</label></div>
+    </div>
+
+    <div class="section-title">Medical & Emergency</div>
+    <div class="mb-3">
+      <label class="form-label">Ailments (Optional)</label>
+      <textarea name="ailments" id="ailments" class="form-control" rows="2"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="col-md-5 mb-3">
+        <label class="form-label">Relationship</label>
+        <select name="contactType" id="contactType" class="form-select" required>
+          <option value="Father">Father</option>
+          <option value="Mother">Mother</option>
+          <option value="Guardian">Guardian</option>
+        </select>
+      </div>
+      <div class="col-md-7 mb-3">
+        <label class="form-label">Contact Name</label>
+        <input type="text" name="contactName" id="contactName" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label">Contact Phone</label>
+      <input type="tel" name="contactPhone" id="contactPhone" class="form-control" required>
+    </div>
+
+    <div class="d-grid gap-2">
+      <button type="submit" class="btn btn-primary btn-submit p-2" id="submitBtn">Save Information</button>
+      <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">Clear / New Form</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbxWJczPlpOTc20zWxVw1u4tn2L9R8ahfYmSsGjUiztUwzUYBOsgBkbsBnrqIvF4sbRD/exec'; 
+
+  function toggleBaptismDate(show) {
+    document.getElementById('baptismDateDiv').style.display = show ? 'block' : 'none';
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('regForm');
+    const btn = document.getElementById('submitBtn');
+    
+    if (form) {
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        btn.disabled = true;
+        btn.innerText = "Processing...";
+
+        const formData = {};
+        const fd = new FormData(form);
+        fd.forEach((value, key) => formData[key] = value);
+
+        const ministries = [];
+        document.querySelectorAll('.ministry-check:checked').forEach(cb => ministries.push(cb.value));
+        formData['ministryAreas'] = ministries.join(', ');
+
+        try {
+          await fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors', 
+            cache: 'no-cache',
+            body: JSON.stringify(formData)
+          });
+          
+          const msg = document.getElementById('messageBox');
+          msg.className = "alert alert-success";
+          msg.innerText = "Information saved! Form has been cleared.";
+          msg.style.display = "block";
+          resetForm();
+        } catch (err) {
+          const msg = document.getElementById('messageBox');
+          msg.className = "alert alert-danger";
+          msg.innerText = "Network Error. Check Web App URL.";
+          msg.style.display = "block";
+        } finally {
+          btn.disabled = false;
+          btn.innerText = "Save Information";
+          window.scrollTo(0, 0);
+          setTimeout(() => { document.getElementById('messageBox').style.display = 'none'; }, 5000);
+        }
+      });
+    }
+  });
+
+  async function handleSearch() {
+    const queryInput = document.getElementById('searchInput');
+    const resultsDiv = document.getElementById('searchResults');
+    const query = queryInput.value.trim();
+    if (query.length < 2) return;
+    
+    resultsDiv.innerHTML = '<div class="p-2 text-muted">Searching...</div>';
+    resultsDiv.style.display = 'block';
+
+    try {
+      const response = await fetch(`${scriptURL}?search=${encodeURIComponent(query)}`);
+      const results = await response.json();
+      displayResults(results);
+    } catch (err) {
+      resultsDiv.innerHTML = '<div class="p-2 text-danger">Search error. Ensure Web App is public.</div>';
+    }
+  }
+
+  function displayResults(results) {
+    const resultsDiv = document.getElementById('searchResults');
+    if (results.length === 0) {
+      resultsDiv.innerHTML = '<div class="p-2 text-danger">No members found.</div>';
+      return;
+    }
+    resultsDiv.innerHTML = results.map(item => `
+      <div class="search-item" onclick='loadRecord(${JSON.stringify(item).replace(/'/g, "&apos;")})'>
+        <strong>${item.firstname} ${item.lastname}</strong><br>
+        <small class="text-muted">${item.church} | ${item.phonenumber}</small>
+      </div>
+    `).join('');
+  }
+
+  function loadRecord(item) {
+    resetForm();
+    document.getElementById('entryId').value = item.id || "";
+    document.getElementById('firstName').value = item.firstname || "";
+    document.getElementById('lastName').value = item.lastname || "";
+    document.getElementById('gender').value = item.gender || "";
+    document.getElementById('church').value = item.church || "";
+    document.getElementById('pastorName').value = item.nameofpastor || "";
+    document.getElementById('youthLeader').value = item.youthministryleader || "";
+    document.getElementById('phone').value = item.phonenumber || "";
+    document.getElementById('ailments').value = item.ailments || "";
+    
+    if(item.whendidyouacceptjesuschristasyourpersonallordandsaviour) {
+      document.getElementById('salvationDate').value = formatDateForInput(item.whendidyouacceptjesuschristasyourpersonallordandsaviour);
+    }
+
+    const baptismVal = item.whenwereyouwaterbaptizedbecominganofficialmemberofyourlocalassembly || "";
+    if (baptismVal.includes("Not baptized")) {
+      document.getElementById('baptizedNo').checked = true;
+      toggleBaptismDate(false);
+    } else {
+      document.getElementById('baptizedYes').checked = true;
+      toggleBaptismDate(true);
+      document.getElementById('baptismDate').value = formatDateForInput(baptismVal);
+    }
+
+    if (item.haveyoueverexperiencedthebaptismoftheholyghostandfire === "Yes") {
+      document.getElementById('hgYes').checked = true;
+    } else {
+      document.getElementById('hgNo').checked = true;
+    }
+
+    const activeMinistries = item.whatareasofministryareyoucurrentlyactiveatyourlocalassembly || "";
+    document.querySelectorAll('.ministry-check').forEach(cb => {
+      if (activeMinistries.includes(cb.value)) cb.checked = true;
+    });
+    
+    const contactValue = item.contactperson || "";
+    const contactParts = contactValue.split(': ');
+    if (contactParts.length > 1) {
+      document.getElementById('contactType').value = contactParts[0];
+      document.getElementById('contactName').value = contactParts[1];
+    } else {
+      document.getElementById('contactName').value = contactValue;
+    }
+    document.getElementById('contactPhone').value = item.contactnumber || "";
+    
+    document.getElementById('modeDisplay').innerText = "Mode: Updating Existing Member";
+    document.getElementById('modeDisplay').className = "mode-indicator mode-update";
+    document.getElementById('searchResults').style.display = 'none';
+  }
+
+  function formatDateForInput(dateStr) {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    if (isNaN(date)) return "";
+    return date.toISOString().split('T')[0];
+  }
+
+  function resetForm() {
+    document.getElementById('regForm').reset();
+    document.getElementById('entryId').value = "";
+    document.getElementById('modeDisplay').innerText = "Mode: New Member Registration";
+    document.getElementById('modeDisplay').className = "mode-indicator mode-new";
+    document.getElementById('searchResults').style.display = 'none';
+    toggleBaptismDate(false);
+  }
+</script>
+</body>
+</html>
