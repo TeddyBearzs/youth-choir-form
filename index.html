@@ -341,9 +341,7 @@
               onchange="toggleBaptismDate(false)"
               checked
             />
-            <label class="form-check-label" for="baptizedNo"
-              >Not baptized as yet / In process ✅</label
-            >
+            <label class="form-check-label" for="baptizedNo">Not baptized as yet / In process</label>
           </div>
         </div>
 
@@ -359,8 +357,7 @@
 
         <div class="mb-3">
           <label class="form-label d-block"
-            >Have you ever experienced the Baptism of the Holy Ghost and
-            fire?</label
+            >Have you ever experienced the Baptism of the Holy Ghost and Fire...with the evidence of speaking in tongues?</label
           >
           <div class="form-check form-check-inline">
             <input
@@ -382,7 +379,6 @@
               checked
             />
             <label class="form-check-label" for="hgNo">No</label>
-          </div>
         </div>
 
         <div class="section-title">Ministry Involvement</div>
@@ -390,7 +386,7 @@
           Select the area(s) of ministry you are currently active in at your
           local assembly:
         </p>
-        <div class="ministry-grid mb-3">
+        <div class="ministry-grid mb-2">
           <div class="form-check">
             <input
               class="form-check-input ministry-check"
@@ -465,29 +461,34 @@
               >Outreach</label
             >
           </div>
-          <div class="form-check">
-            <input
-              class="form-check-input ministry-check"
-              type="checkbox"
-              value="Missions"
-            />
-            <label class="form-check-label" for="Missions">Missions</label>
-          </div>
-        </div>
-        <section>
+          
+          <div>
           <h3 class="section">Creative Arts</h3>
+            <select
+             name="CreativeArts"
+             id="creativeArtsSelect"
+             class="form-select"
+            >
+              <option value="">Select Creative Arts</option>
+              <option value="Mime">Mime</option>
+              <option value="Dance">Dance</option>
+              <option value="Drama">Drama</option>
+              <option value="Spoken Word">Spoken Word</option>
+            </select>
+           </div>
+         <div>
+          <h3 class="section">Missions</h3>
           <select
-            name="CreativeArts"
-            id="creativeArtsSelect"
+            name="Missions"
+            id="missionsSelect"
             class="form-select"
           >
-            <option value="">Select Creative Arts</option>
-            <option value="Mime">Mime</option>
-            <option value="Dance">Dance</option>
-            <option value="Drama">Drama</option>
-            <option value="Spoken Word">Spoken Word</option>
+            <option value="">Select Missions</option>
+            <option value="Ministry to the Youth">Ministry to the Youth</option>            
           </select>
-        </section>
+        </div>
+        </div>
+        
 
         <div class="section-title">Emergenc Medical Info.</div>
         <div class="mb-3">
