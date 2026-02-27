@@ -38,6 +38,11 @@
         font-weight: bold;
         border-left: 5px solid #dc3545;
       }
+      .section {
+        font-size: 1rem;
+        color: #dc3545;
+        font-weight: light;
+      }
       #messageBox {
         display: none;
         margin-bottom: 20px;
@@ -460,9 +465,31 @@
               >Outreach</label
             >
           </div>
+          <div class="form-check">
+            <input
+              class="form-check-input ministry-check"
+              type="checkbox"
+              value="Missions"
+            />
+            <label class="form-check-label" for="Missions">Missions</label>
+          </div>
         </div>
+        <section>
+          <h3 class="section">Creative Arts</h3>
+          <select
+            name="CreativeArts"
+            id="creativeArtsSelect"
+            class="form-select"
+          >
+            <option value="">Select Creative Arts</option>
+            <option value="Mime">Mime</option>
+            <option value="Dance">Dance</option>
+            <option value="Drama">Drama</option>
+            <option value="Spoken Word">Spoken Word</option>
+          </select>
+        </section>
 
-        <div class="section-title">Medical & Emergency</div>
+        <div class="section-title">Emergenc Medical Info.</div>
         <div class="mb-3">
           <label class="form-label">Ailments (Optional)</label><br />
           <textarea
